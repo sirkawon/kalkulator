@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Doboru Siłowników</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      text-align: center;
+    }
+    .logo {
+      width: 200px;
+      margin: 0 auto 20px;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #3b3b3b;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333333;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eaf1f8;
+      border-radius: 5px;
+      font-weight: bold;
+      color: #3b3b3b;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    .important-info {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      text-align: left;
+      width: 400px;
+    }
+    .important-info h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #721c24;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .important-info p {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://kavon.pl/skins/user/rwd_shoper_5/images/logo.svg" alt="Logo firmy" class="logo">
+    <h1>Kalkulator Doboru Siłowników</h1>
+    <label for="size">Rozmiar materaca:</label>
+    <select id="size">
+      <option value="80x200">80x200 cm</option>
+      <option value="90x200">90x200 cm</option>
+      <option value="100x200">100x200 cm</option>
+      <option value="120x200">120x200 cm</option>
+      <option value="140x200">140x200 cm</option>
+      <option value="160x200">160x200 cm</option>
+      <option value="180x200">180x200 cm</option>
+      <option value="200x200">200x200 cm</option>
+    </select>
+
+    <label for="opening">Sposób otwierania:</label>
+    <select id="opening">
+      <option value="legs">Od nóg - krótsza krawędź</option>
+      <option value="side">Od boku - dłuższa krawędź</option>
+    </select>
+
+    <label for="weight">Waga materaca (kg):</label>
+    <input type="number" id="weight" placeholder="Wpisz wagę materaca">
+
+    <button onclick="calculateActuator()">DOBIERZ SIŁOWNIKI</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <div class="important-info">
+    <h2>Ważne informacje</h2>
+    <p><strong>1.</strong> Siłowniki należy montować zawsze grubszą częścią skierowaną ku górze, aby zapewnić poprawne smarowanie i optymalną żywotność urządzenia.</p>
+    <p><strong>2.</strong> Dobór siłowników w kalkulatorze opiera się na ogólnych wytycznych. W przypadku problemów istnieje możliwość wymiany na inne, bardziej odpowiednie siłowniki.</p>
+    <p><strong>3.</strong> Siłowników nie można składać ręcznie. Po zamontowaniu stelaża i siłowników w łóżku należy najpierw położyć docelowy materac na stelażu, a następnie delikatnie zamknąć stelaż. 
+      <strong>Nie należy próbować zamykać stelaża bez materaca ani uwieszać się na nim, ponieważ może to uszkodzić siłowniki.</strong></p>
+  </div>
+
+  <script>
+    function calculateActuator() {
+      const size = document.getElementById("size").value;
+      const opening = document.getElementById("opening").value;
+      const weight = parseInt(document.getElementById("weight").value);
+      const result = document.getElementById("result");
+
+      if (isNaN(weight) || weight <= 0) {
+        result.innerHTML = "<span class='error'>Proszę podać prawidłową wagę materaca!</span>";
+        return;
+      }
+
+      let force;
+      let message = "";
+
+      if (opening === "side") {
+        switch (size) {
+          case "80x200":
+          case "200x200":
+            result.innerHTML = "Otwieranie boczne nie jest dostępne dla tego rozmiaru.";
+            return;
+          case "90x200":
+          case "100x200":
+            if (weight <= 25) force = 350;
+            else {
+              force = 400;
+              message = "Ta moc siłownika jest rzadko stosowana.";
+            }
+            break;
+          case "120x200":
+            force = 600;
+            break;
+          case "140x200":
+            if (weight <= 15) force = 600;
+            else if (weight <= 45) force = 800;
+            else force = 900;
+            break;
+          case "160x200":
+            if (weight <= 40) force = 900;
+            else force = 1000;
+            break;
+          case "180x200":
+            force = 1000;
+            break;
+          default:
+            result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+            return;
+        }
+      } else {
+        switch (size) {
+          case "80x200":
+            if (weight <= 15) force = 400;
+            else if (weight <= 25) force = 500;
+            else {
+              force = 500;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "90x200":
+          case "100x200":
+            if (weight <= 25) force = 500;
+            else {
+              force = 500;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "120x200":
+            if (weight <= 15) force = 600;
+            else if (weight <= 30) force = 800;
+            else if (weight <= 40) force = 900;
+            else {
+              force = 900;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "140x200":
+            if (weight <= 20) force = 800;
+            else if (weight <= 35) force = 900;
+            else if (weight <= 45) force = 1000;
+            else {
+              force = 1000;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "160x200":
+            if (weight <= 25) force = 900;
+            else if (weight <= 40) force = 1000;
+            else if (weight <= 50) force = 1200;
+            else {
+              force = 1200;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "180x200":
+            if (weight <= 35) force = 1000;
+            else if (weight <= 45) force = 1200;
+            else if (weight <= 55) force = 1350;
+            else {
+              force = 1350;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          case "200x200":
+            if (weight <= 40) force = 1200;
+            else if (weight <= 50) force = 1350;
+            else if (weight <= 65) force = 1450;
+            else {
+              force = 1450;
+              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+            }
+            break;
+          default:
+            result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+            return;
+        }
+      }
+
+      if (force) {
+        result.innerHTML = `Zalecane siłowniki: ${force}N<br>${message}`;
+      } else {
+        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tych parametrów.</span>";
+      }
+    }
+  </script>
+</body>
+</html>
