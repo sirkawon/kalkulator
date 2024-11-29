@@ -133,128 +133,145 @@
   </div>
 
   <script>
-    function calculateActuator() {
-      const size = document.getElementById("size").value;
-      const opening = document.getElementById("opening").value;
-      const weight = parseInt(document.getElementById("weight").value);
-      const result = document.getElementById("result");
+function calculateActuator() {
+  const size = document.getElementById("size").value;
+  const opening = document.getElementById("opening").value;
+  const weight = parseInt(document.getElementById("weight").value);
+  const result = document.getElementById("result");
 
-      if (isNaN(weight) || weight <= 0) {
-        result.innerHTML = "<span class='error'>Proszę podać prawidłową wagę materaca!</span>";
+  if (isNaN(weight) || weight <= 0) {
+    result.innerHTML = "<span class='error'>Proszę podać prawidłową wagę materaca!</span>";
+    return;
+  }
+
+  let force;
+  let message = "";
+
+  if (opening === "side") {
+    switch (size) {
+      case "80x200":
+      case "200x200":
+        result.innerHTML = "Otwieranie boczne nie jest dostępne dla tego rozmiaru.";
         return;
-      }
-
-      let force;
-      let message = "";
-
-      if (opening === "side") {
-        switch (size) {
-          case "80x200":
-          case "200x200":
-            result.innerHTML = "Otwieranie boczne nie jest dostępne dla tego rozmiaru.";
-            return;
-          case "90x200":
-          case "100x200":
-            if (weight <= 25) force = 350;
-            else {
-              force = 400;
-              message = "Ta moc siłownika jest rzadko stosowana.";
-            }
-            break;
-          case "120x200":
-            force = 600;
-            break;
-          case "140x200":
-            if (weight <= 15) force = 600;
-            else if (weight <= 45) force = 800;
-            else force = 900;
-            break;
-          case "160x200":
-            if (weight <= 40) force = 900;
-            else force = 1000;
-            break;
-          case "180x200":
-            force = 1000;
-            break;
-          default:
-            result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
-            return;
+      case "90x200":
+      case "100x200":
+        if (weight <= 25) force = 350;
+        else {
+          force = 400;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
         }
-      } else {
-        switch (size) {
-          case "80x200":
-            if (weight <= 15) force = 400;
-            else if (weight <= 25) force = 500;
-            else {
-              force = 500;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "90x200":
-          case "100x200":
-            if (weight <= 25) force = 500;
-            else {
-              force = 500;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "120x200":
-            if (weight <= 15) force = 600;
-            else if (weight <= 30) force = 800;
-            else if (weight <= 40) force = 900;
-            else {
-              force = 900;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "140x200":
-            if (weight <= 20) force = 800;
-            else if (weight <= 35) force = 900;
-            else if (weight <= 45) force = 1000;
-            else {
-              force = 1000;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "160x200":
-            if (weight <= 25) force = 900;
-            else if (weight <= 40) force = 1000;
-            else if (weight <= 50) force = 1200;
-            else {
-              force = 1200;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "180x200":
-            if (weight <= 35) force = 1000;
-            else if (weight <= 45) force = 1200;
-            else if (weight <= 55) force = 1350;
-            else {
-              force = 1350;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          case "200x200":
-            if (weight <= 40) force = 1200;
-            else if (weight <= 50) force = 1350;
-            else if (weight <= 65) force = 1450;
-            else {
-              force = 1450;
-              message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
-            }
-            break;
-          default:
-            result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
-            return;
+        break;
+      case "120x200":
+        if (weight <= 30) force = 600;
+        else if (weight <= 40) force = 900;
+        else {
+          force = 900;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
         }
-      }
-
-      if (force) {
-        result.innerHTML = `Zalecane siłowniki: ${force}N<br>${message}`;
-      } else {
-        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tych parametrów.</span>";
-      }
+        break;
+      case "140x200":
+        if (weight <= 15) force = 600;
+        else if (weight <= 45) force = 800;
+        else {
+          force = 900;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "160x200":
+        if (weight <= 40) force = 900;
+        else if (weight <= 50) force = 1000;
+        else {
+          force = 1000;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "180x200":
+        if (weight <= 45) force = 1000;
+        else if (weight <= 55) force = 1350;
+        else {
+          force = 1350;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      default:
+        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+        return;
     }
+  } else {
+    switch (size) {
+      case "80x200":
+        if (weight <= 15) force = 400;
+        else if (weight <= 25) force = 500;
+        else {
+          force = 500;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "90x200":
+      case "100x200":
+        if (weight <= 25) force = 500;
+        else {
+          force = 500;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "120x200":
+        if (weight <= 15) force = 600;
+        else if (weight <= 30) force = 800;
+        else if (weight <= 40) force = 900;
+        else {
+          force = 900;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "140x200":
+        if (weight <= 20) force = 800;
+        else if (weight <= 35) force = 900;
+        else if (weight <= 45) force = 1000;
+        else {
+          force = 1000;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "160x200":
+        if (weight <= 25) force = 900;
+        else if (weight <= 40) force = 1000;
+        else if (weight <= 50) force = 1200;
+        else {
+          force = 1200;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "180x200":
+        if (weight <= 35) force = 1000;
+        else if (weight <= 45) force = 1200;
+        else if (weight <= 55) force = 1350;
+        else {
+          force = 1350;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      case "200x200":
+        if (weight <= 40) force = 1200;
+        else if (weight <= 50) force = 1350;
+        else if (weight <= 65) force = 1450;
+        else {
+          force = 1450;
+          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+        }
+        break;
+      default:
+        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+        return;
+    }
+  }
+
+  if (force) {
+    result.innerHTML = `Zalecane siłowniki: ${force}N<br>${message}`;
+  } else {
+    result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tych parametrów.</span>";
+  }
+}
   </script>
 </body>
 </html>
