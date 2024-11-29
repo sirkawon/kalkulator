@@ -256,5 +256,16 @@
       }
     }
   </script>
+  <script>
+  // Funkcja do dynamicznego ustawiania wysokości iframe
+  function sendHeight() {
+    const height = document.body.scrollHeight; // Oblicz wysokość dokumentu
+    window.parent.postMessage({ frameHeight: height }, "*");
+  }
+
+  // Wywołaj funkcję po załadowaniu strony
+  window.onload = sendHeight;
+  window.addEventListener("resize", sendHeight);
+</script>
 </body>
 </html>
