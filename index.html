@@ -47,6 +47,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       font-size: 1em;
+      box-sizing: border-box;
     }
     button {
       background: #007bff;
@@ -95,10 +96,10 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://kavon.pl/skins/user/rwd_shoper_5/images/logo.svg" alt="Logo firmy" class="logo">
-    <h2>KALKULATOR DOBORU SIŁOWNIKÓW</h2>
-    <font size="3"><b>Dotyczy tylko metalowych stelaży firmy KAVON</b></font>
-    <label for="size">Rozmiar materaca:</label>
+    <img src="https://kavon.pl/environment/cache/images/storefrontImages_8666453f-a247-4118-9072-fb2ed906bef4_0_0.jpeg" alt="KAVON" class="logo">
+    <h2 id="t-heading">KALKULATOR DOBORU SIŁOWNIKÓW</h2>
+    <font size="3"><b id="t-note">Dotyczy tylko metalowych stelaży firmy KAVON</b></font>
+    <label for="size" id="t-size">Rozmiar materaca:</label>
     <select id="size">
       <option value="80x200">80x200 cm</option>
       <option value="90x200">90x200 cm</option>
@@ -110,29 +111,192 @@
       <option value="200x200">200x200 cm</option>
     </select>
 
-    <label for="opening">Sposób otwierania:</label>
+    <label for="opening" id="t-opening">Sposób otwierania:</label>
     <select id="opening">
-      <option value="legs">Od nóg - krótsza krawędź</option>
-      <option value="side">Od boku - dłuższa krawędź</option>
+      <option value="legs" id="t-legs">Od nóg - krótsza krawędź</option>
+      <option value="side" id="t-side">Od boku - dłuższa krawędź</option>
     </select>
 
-    <label for="weight">Waga materaca (kg):</label>
+    <label for="weight" id="t-weight">Waga materaca (kg):</label>
     <input type="number" id="weight" placeholder="Wpisz wagę materaca">
 
-    <button onclick="calculateActuator()">DOBIERZ SIŁOWNIKI</button>
+    <button onclick="calculateActuator()" id="t-button">DOBIERZ SIŁOWNIKI</button>
 
     <div id="result" class="result"></div>
   </div>
 
   <div class="important-info">
-    <h2>Ważne informacje</h2>
-    <p><strong>1.</strong> Siłowniki należy montować zawsze grubszą częścią skierowaną ku górze, aby zapewnić poprawne smarowanie i optymalną żywotność urządzenia.</p>
-    <p><strong>2.</strong> Dobór siłowników w kalkulatorze opiera się na ogólnych wytycznych. W przypadku problemów istnieje możliwość wymiany na inne, bardziej odpowiednie siłowniki.</p>
-    <p><strong>3.</strong> Siłowników nie można składać ręcznie. Po zamontowaniu stelaża i siłowników w łóżku należy najpierw położyć docelowy materac na stelażu, a następnie delikatnie zamknąć stelaż. 
-      <strong>Nie należy próbować zamykać stelaża bez materaca ani uwieszać się na nim, ponieważ może to uszkodzić siłowniki.</strong></p>
+    <h2 id="t-infoHeading">Ważne informacje</h2>
+    <p><strong>1.</strong> <span id="t-info1">Siłowniki należy montować zawsze grubszą częścią skierowaną ku górze, aby zapewnić poprawne smarowanie i optymalną żywotność urządzenia.</span></p>
+    <p><strong>2.</strong> <span id="t-info2">Dobór siłowników w kalkulatorze opiera się na ogólnych wytycznych. W przypadku problemów istnieje możliwość wymiany na inne, bardziej odpowiednie siłowniki.</span></p>
+    <p><strong>3.</strong> <span id="t-info3">Siłowników nie można składać ręcznie. Po zamontowaniu stelaża i siłowników w łóżku należy najpierw położyć docelowy materac na stelażu, a następnie delikatnie zamknąć stelaż. <strong>Nie należy próbować zamykać stelaża bez materaca ani uwieszać się na nim, ponieważ może to uszkodzić siłowniki.</strong></span></p>
   </div>
 
   <script>
+// ===================== TŁUMACZENIA =====================
+var I18N = {
+  pl: {
+    docTitle: "Kalkulator Doboru Siłowników",
+    heading: "KALKULATOR DOBORU SIŁOWNIKÓW",
+    note: "Dotyczy tylko metalowych stelaży firmy KAVON",
+    size: "Rozmiar materaca:",
+    opening: "Sposób otwierania:",
+    legs: "Od nóg - krótsza krawędź",
+    side: "Od boku - dłuższa krawędź",
+    weight: "Waga materaca (kg):",
+    placeholder: "Wpisz wagę materaca",
+    button: "DOBIERZ SIŁOWNIKI",
+    infoHeading: "Ważne informacje",
+    info1: "Siłowniki należy montować zawsze grubszą częścią skierowaną ku górze, aby zapewnić poprawne smarowanie i optymalną żywotność urządzenia.",
+    info2: "Dobór siłowników w kalkulatorze opiera się na ogólnych wytycznych. W przypadku problemów istnieje możliwość wymiany na inne, bardziej odpowiednie siłowniki.",
+    info3: "Siłowników nie można składać ręcznie. Po zamontowaniu stelaża i siłowników w łóżku należy najpierw położyć docelowy materac na stelażu, a następnie delikatnie zamknąć stelaż. <strong>Nie należy próbować zamykać stelaża bez materaca ani uwieszać się na nim, ponieważ może to uszkodzić siłowniki.</strong>",
+    errInvalid: "Proszę podać prawidłową wagę materaca!",
+    errSide: "Otwieranie boczne nie jest dostępne dla tego rozmiaru.",
+    errNoSize: "Nie znaleziono odpowiednich siłowników dla tego rozmiaru.",
+    errNoParams: "Nie znaleziono odpowiednich siłowników dla tych parametrów.",
+    tooHeavy: "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.",
+    result: "Zalecane siłowniki: {force}N"
+  },
+  cs: {
+    docTitle: "Kalkulačka pro výběr plynových pístů",
+    heading: "KALKULAČKA PRO VÝBĚR PLYNOVÝCH PÍSTŮ",
+    note: "Platí pouze pro kovové rošty značky KAVON",
+    size: "Rozměr matrace:",
+    opening: "Způsob otevírání:",
+    legs: "Od nohou – kratší strana",
+    side: "Z boku – delší strana",
+    weight: "Váha matrace (kg):",
+    placeholder: "Zadejte váhu matrace",
+    button: "VYBRAT PÍSTY",
+    infoHeading: "Důležité informace",
+    info1: "Písty montujte vždy silnější částí směrem nahoru, aby bylo zajištěno správné mazání a optimální životnost.",
+    info2: "Výběr pístů v kalkulačce vychází z obecných pokynů. V případě problémů je možná výměna za jiné, vhodnější písty.",
+    info3: "Písty nelze stlačit ručně. Po namontování roštu a pístů do postele nejprve položte na rošt cílovou matraci a poté rošt opatrně zavřete. <strong>Nepokoušejte se zavírat rošt bez matrace ani se na něj věšet – mohlo by dojít k poškození pístů.</strong>",
+    errInvalid: "Zadejte prosím platnou váhu matrace!",
+    errSide: "Boční otevírání není pro tento rozměr dostupné.",
+    errNoSize: "Pro tento rozměr nebyly nalezeny vhodné písty.",
+    errNoParams: "Pro tyto parametry nebyly nalezeny vhodné písty.",
+    tooHeavy: "Váha matrace je příliš vysoká! Doporučujeme písty s maximální dostupnou silou.",
+    result: "Doporučené písty: {force}N"
+  },
+  de: {
+    docTitle: "Gasdruckfeder-Rechner",
+    heading: "GASDRUCKFEDER-RECHNER",
+    note: "Gilt nur für Metall-Lattenroste von KAVON",
+    size: "Matratzengröße:",
+    opening: "Öffnungsart:",
+    legs: "Vom Fußende – kürzere Kante",
+    side: "Von der Seite – längere Kante",
+    weight: "Matratzengewicht (kg):",
+    placeholder: "Matratzengewicht eingeben",
+    button: "GASDRUCKFEDERN AUSWÄHLEN",
+    infoHeading: "Wichtige Informationen",
+    info1: "Gasdruckfedern immer mit dem dickeren Teil nach oben montieren, um eine korrekte Schmierung und optimale Lebensdauer zu gewährleisten.",
+    info2: "Die Auswahl im Rechner basiert auf allgemeinen Richtlinien. Bei Problemen ist ein Austausch gegen besser geeignete Gasdruckfedern möglich.",
+    info3: "Gasdruckfedern lassen sich nicht von Hand zusammendrücken. Nach der Montage von Lattenrost und Gasdruckfedern im Bett zuerst die endgültige Matratze auf den Lattenrost legen und ihn dann vorsichtig schließen. <strong>Versuchen Sie nicht, den Lattenrost ohne Matratze zu schließen oder sich daran zu hängen – dies kann die Gasdruckfedern beschädigen.</strong>",
+    errInvalid: "Bitte geben Sie ein gültiges Matratzengewicht ein!",
+    errSide: "Seitliche Öffnung ist für diese Größe nicht verfügbar.",
+    errNoSize: "Für diese Größe wurden keine passenden Gasdruckfedern gefunden.",
+    errNoParams: "Für diese Parameter wurden keine passenden Gasdruckfedern gefunden.",
+    tooHeavy: "Das Matratzengewicht ist zu hoch! Wir empfehlen Gasdruckfedern mit der maximal verfügbaren Kraft.",
+    result: "Empfohlene Gasdruckfedern: {force}N"
+  },
+  en: {
+    docTitle: "Gas Spring Selection Calculator",
+    heading: "GAS SPRING SELECTION CALCULATOR",
+    note: "Applies only to KAVON metal bed frames",
+    size: "Mattress size:",
+    opening: "Opening direction:",
+    legs: "From the foot end – shorter edge",
+    side: "From the side – longer edge",
+    weight: "Mattress weight (kg):",
+    placeholder: "Enter mattress weight",
+    button: "SELECT GAS SPRINGS",
+    infoHeading: "Important information",
+    info1: "Always install gas springs with the thicker part facing up to ensure proper lubrication and optimal service life.",
+    info2: "The calculator's recommendations are based on general guidelines. In case of problems, springs can be exchanged for more suitable ones.",
+    info3: "Gas springs cannot be compressed by hand. After installing the frame and gas springs in the bed, first place the target mattress on the frame, then gently close the frame. <strong>Do not attempt to close the frame without a mattress or hang on it, as this may damage the gas springs.</strong>",
+    errInvalid: "Please enter a valid mattress weight!",
+    errSide: "Side opening is not available for this size.",
+    errNoSize: "No suitable gas springs found for this size.",
+    errNoParams: "No suitable gas springs found for these parameters.",
+    tooHeavy: "The mattress weight is too high! We suggest gas springs with the maximum available force.",
+    result: "Recommended gas springs: {force}N"
+  },
+  fr: {
+    docTitle: "Calculateur de sélection des vérins à gaz",
+    heading: "CALCULATEUR DE SÉLECTION DES VÉRINS À GAZ",
+    note: "Concerne uniquement les sommiers métalliques KAVON",
+    size: "Taille du matelas :",
+    opening: "Sens d'ouverture :",
+    legs: "Par le pied – bord court",
+    side: "Par le côté – bord long",
+    weight: "Poids du matelas (kg) :",
+    placeholder: "Saisissez le poids du matelas",
+    button: "SÉLECTIONNER LES VÉRINS",
+    infoHeading: "Informations importantes",
+    info1: "Montez toujours les vérins avec la partie la plus épaisse vers le haut pour assurer une bonne lubrification et une durée de vie optimale.",
+    info2: "La sélection du calculateur repose sur des recommandations générales. En cas de problème, un échange contre des vérins plus adaptés est possible.",
+    info3: "Les vérins ne peuvent pas être comprimés à la main. Après le montage du sommier et des vérins dans le lit, posez d'abord le matelas définitif sur le sommier, puis refermez-le doucement. <strong>N'essayez pas de fermer le sommier sans matelas ni de vous y suspendre – cela pourrait endommager les vérins.</strong>",
+    errInvalid: "Veuillez saisir un poids de matelas valide !",
+    errSide: "L'ouverture latérale n'est pas disponible pour cette taille.",
+    errNoSize: "Aucun vérin adapté trouvé pour cette taille.",
+    errNoParams: "Aucun vérin adapté trouvé pour ces paramètres.",
+    tooHeavy: "Le poids du matelas est trop élevé ! Nous suggérons des vérins de la force maximale disponible.",
+    result: "Vérins recommandés : {force}N"
+  }
+};
+
+// ===================== DETEKCJA JĘZYKA =====================
+// Priorytet: 1) ?lang=xx  2) referrer (domena sklepu)  3) hostname  4) język przeglądarki  5) PL
+function detectLang() {
+  try {
+    var param = new URLSearchParams(window.location.search).get('lang');
+    if (param && I18N[param.toLowerCase()]) return param.toLowerCase();
+  } catch (e) {}
+
+  var sources = [window.location.hostname || '', document.referrer || ''];
+  for (var i = 0; i < sources.length; i++) {
+    var s = sources[i];
+    if (s.indexOf('kavonpostele.cz') > -1) return 'cs';
+    if (s.indexOf('kavonbetten.de') > -1) return 'de';
+    if (s.indexOf('kavonlits.fr') > -1) return 'fr';
+    if (s.indexOf('kavonbeds.com') > -1) return 'en';
+    if (s.indexOf('kavon.pl') > -1) return 'pl';
+  }
+
+  var nav = (navigator.language || '').toLowerCase();
+  if (nav.indexOf('cs') === 0) return 'cs';
+  if (nav.indexOf('de') === 0) return 'de';
+  if (nav.indexOf('fr') === 0) return 'fr';
+  if (nav.indexOf('en') === 0) return 'en';
+
+  return 'pl';
+}
+
+var LANG = detectLang();
+var T = I18N[LANG];
+
+// ===================== PODSTAWIENIE TEKSTÓW =====================
+(function applyTranslations() {
+  document.documentElement.lang = LANG;
+  document.title = T.docTitle;
+  document.getElementById('t-heading').textContent = T.heading;
+  document.getElementById('t-note').textContent = T.note;
+  document.getElementById('t-size').textContent = T.size;
+  document.getElementById('t-opening').textContent = T.opening;
+  document.getElementById('t-legs').textContent = T.legs;
+  document.getElementById('t-side').textContent = T.side;
+  document.getElementById('t-weight').textContent = T.weight;
+  document.getElementById('weight').placeholder = T.placeholder;
+  document.getElementById('t-button').textContent = T.button;
+  document.getElementById('t-infoHeading').textContent = T.infoHeading;
+  document.getElementById('t-info1').innerHTML = T.info1;
+  document.getElementById('t-info2').innerHTML = T.info2;
+  document.getElementById('t-info3').innerHTML = T.info3;
+})();
+
+// ===================== LOGIKA KALKULATORA (bez zmian) =====================
 function calculateActuator() {
   const size = document.getElementById("size").value;
   const opening = document.getElementById("opening").value;
@@ -140,7 +304,7 @@ function calculateActuator() {
   const result = document.getElementById("result");
 
   if (isNaN(weight) || weight <= 0) {
-    result.innerHTML = "<span class='error'>Proszę podać prawidłową wagę materaca!</span>";
+    result.innerHTML = "<span class='error'>" + T.errInvalid + "</span>";
     return;
   }
 
@@ -151,14 +315,14 @@ function calculateActuator() {
     switch (size) {
       case "80x200":
       case "200x200":
-        result.innerHTML = "Otwieranie boczne nie jest dostępne dla tego rozmiaru.";
+        result.innerHTML = T.errSide;
         return;
       case "90x200":
       case "100x200":
         if (weight <= 25) force = 350;
         else {
           force = 400;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "120x200":
@@ -166,7 +330,7 @@ function calculateActuator() {
         else if (weight <= 40) force = 900;
         else {
           force = 900;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "140x200":
@@ -174,7 +338,7 @@ function calculateActuator() {
         else if (weight <= 45) force = 800;
         else {
           force = 900;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "160x200":
@@ -182,7 +346,7 @@ function calculateActuator() {
         else if (weight <= 50) force = 1000;
         else {
           force = 1000;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "180x200":
@@ -190,11 +354,11 @@ function calculateActuator() {
         else if (weight <= 55) force = 1350;
         else {
           force = 1350;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       default:
-        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+        result.innerHTML = "<span class='error'>" + T.errNoSize + "</span>";
         return;
     }
   } else {
@@ -204,7 +368,7 @@ function calculateActuator() {
         else if (weight <= 25) force = 500;
         else {
           force = 500;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "90x200":
@@ -212,7 +376,7 @@ function calculateActuator() {
         if (weight <= 25) force = 500;
         else {
           force = 500;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "120x200":
@@ -221,7 +385,7 @@ function calculateActuator() {
         else if (weight <= 40) force = 900;
         else {
           force = 900;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "140x200":
@@ -230,7 +394,7 @@ function calculateActuator() {
         else if (weight <= 45) force = 1000;
         else {
           force = 1000;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "160x200":
@@ -239,7 +403,7 @@ function calculateActuator() {
         else if (weight <= 50) force = 1200;
         else {
           force = 1200;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "180x200":
@@ -248,7 +412,7 @@ function calculateActuator() {
         else if (weight <= 55) force = 1350;
         else {
           force = 1350;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       case "200x200":
@@ -257,19 +421,19 @@ function calculateActuator() {
         else if (weight <= 65) force = 1450;
         else {
           force = 1450;
-          message = "Waga materaca jest zbyt wysoka! Sugerujemy siłowniki o maksymalnej dostępnej sile.";
+          message = T.tooHeavy;
         }
         break;
       default:
-        result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tego rozmiaru.</span>";
+        result.innerHTML = "<span class='error'>" + T.errNoSize + "</span>";
         return;
     }
   }
 
   if (force) {
-    result.innerHTML = `Zalecane siłowniki: ${force}N<br>${message}`;
+    result.innerHTML = T.result.replace('{force}', force) + "<br>" + message;
   } else {
-    result.innerHTML = "<span class='error'>Nie znaleziono odpowiednich siłowników dla tych parametrów.</span>";
+    result.innerHTML = "<span class='error'>" + T.errNoParams + "</span>";
   }
 }
   </script>
